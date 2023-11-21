@@ -1,7 +1,6 @@
 import {
   Text,
   View,
-  FlatList,
   TouchableOpacity,
   Dimensions,
   StyleSheet,
@@ -10,43 +9,39 @@ import { useSelector } from "react-redux";
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-// import ElevatedView from "react-native-elevated-view";
 
 import * as Styled from "./style";
+import listStyle from "../../api/listOfStyles";
 
 import ImgLogo from "../../../assets/images/logo.svg";
 import ArrowIcon from "../../../assets/images/icon-arrow-down.svg";
 import ImgMoon from "../../../assets/images/icon-moon.svg";
 
 import { RootState } from "../../api/redux/configRedux";
-import { toggleTheme } from "../../api/redux/useTheme/reducer";
-
-// import Modal from "react-native-modal";
-// import Overlay from 'react-native-overlay';
-// import Modal from 'react-native-modalbox';
-// import Popover from "react-native-popover-view";
+import { toggleFont, toggleTheme } from "../../api/redux/useTheme/reducer";
 
 export default function () {
-  const [toggleSelect, setToggleSelect] = useState<Boolean>(false);
+  const [toggleSelect, setToggleSelect] = useState<Boolean>(true);
   const [selecteFont, setSelecteFont] = useState<string>("Sans Serif");
 
   const dispatch = useDispatch();
-  const { theme } = useSelector(
+  const { theme, font } = useSelector(
     (rootReducer: RootState) => rootReducer.useTheme
   );
 
-  let arrayObj = [
+  let arrayObj: { font: string; fontFM: string }[] = [
     { font: "Sans Serif", fontFM: "sans-serif" },
     { font: "Serif", fontFM: "serif" },
     { font: "Mono", fontFM: "monospace" },
   ];
 
-  function handleSelect(font: string) {
-    setSelecteFont(font);
-  }
-
   function handleTheme() {
     dispatch(toggleTheme({ theme: !theme }));
+  }
+
+  function toggleFontCurrent(option: string, font: string) {
+    setSelecteFont(option);
+    dispatch(toggleFont({ font: font }));
   }
 
   return (
@@ -59,7 +54,16 @@ export default function () {
             onPress={() => setToggleSelect(!toggleSelect)}
             style={{ zIndex: 199 }}
           >
-            <Text style={{ marginRight: 10, fontSize: 17 }}>{selecteFont}</Text>
+            <Text
+              style={{
+                marginRight: 10,
+                fontSize: 17,
+                color: theme ? listStyle.veryLight : listStyle.lightBlack,
+                fontFamily: font,
+              }}
+            >
+              {selecteFont}
+            </Text>
 
             <Styled.Logo rtIcon={toggleSelect ? "0deg" : "180deg"}>
               <ArrowIcon width={18} height={9} />
@@ -74,17 +78,23 @@ export default function () {
                 position: "absolute",
                 top: 25,
                 right: -100,
-                backgroundColor: "red",
                 zIndex: 99,
               },
             ]}
           >
-            <FlatList
+            <Styled.Menu
+              width={Dimensions.get("window").width - 30}
+              bgColor={theme ? listStyle.black : listStyle.veryLight}
+              shadow={theme ? listStyle.purple : listStyle.black}
               data={arrayObj}
-              keyExtractor={(item) => item.font}
-              style={[styles.menu, toggleSelect && styles.toggleMenu]}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => handleSelect(item.font)} >
+              keyExtractor={(item: { font: string; fontFM: string } | any) =>
+                item.font
+              }
+              style={[toggleSelect && styles.toggleMenu]}
+              renderItem={({ item }: {item: { font: string; fontFM: string } | any}) => (
+                <TouchableOpacity
+                  onPress={() => toggleFontCurrent(item.font, item.fontFM)}
+                >
                   <Text
                     style={{
                       width: "100%",
@@ -92,6 +102,8 @@ export default function () {
                       marginBottom: 15,
                       fontSize: 18,
                       fontFamily: item.fontFM,
+                      fontWeight: "700",
+                      color: theme ? listStyle.veryLight : listStyle.lightBlack,
                     }}
                   >
                     {item.font}
@@ -103,7 +115,7 @@ export default function () {
         </Styled.ContainerSelect>
 
         <Styled.ToggleContainer onPress={handleTheme}>
-          <Styled.Toggle>
+          <Styled.Toggle bgTheme={theme ? listStyle.purple : listStyle.gray}>
             <Styled.ToggleBoll theme={theme ? "23px" : "3px"} />
           </Styled.Toggle>
 
@@ -115,24 +127,6 @@ export default function () {
 }
 
 const styles = StyleSheet.create({
-  menu: {
-    width: Dimensions.get("window").width - 30,
-    padding: 15,
-    paddingBottom: 0,
-    position: "absolute",
-    right: 15,
-    top: 15,
-
-    borderRadius: 12,
-    backgroundColor: "white",
-
-    elevation: 5,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-  },
-
   toggleMenu: {
     display: "none",
   },

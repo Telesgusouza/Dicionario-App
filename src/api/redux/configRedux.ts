@@ -3,14 +3,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import useTheme from "./useTheme/reducer";
-// import useWord from './useWord/reducer'
-// import useError from './useError/reducer'
+import useWord from "./useWord/reducer";
+import useError from "./useError/reducer";
 
 export const store = configureStore({
   reducer: {
     useTheme: useTheme,
-    // useWord: useWord,
-    // useError: useError,
+    useWord: useWord,
+    useError: useError,
   },
 });
 
