@@ -4,17 +4,22 @@ import {
   NativeSyntheticEvent,
   TextInputSubmitEditingEventData,
   Alert,
-  TouchableOpacity,
 } from "react-native";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 import * as Styled from "./style";
 import { getDataWord } from "../../api/functions";
 
 import ImgSourch from "../../../assets/images/icon-search.svg";
+import { RootState } from "../../api/redux/configRedux";
 
 export default function () {
   const [input, setInput] = useState("");
+
+  const { theme } = useSelector(
+    (rootReducer: RootState) => rootReducer.useTheme
+  );
 
   useEffect(() => {
     async function getWord() {
@@ -32,6 +37,7 @@ export default function () {
   async function handleWord() {
     if (!!input.trim()) {
       await getDataWord(input);
+      setInput("")
     } else {
       Alert.alert("type a word", "Enter a word so it can be searched");
     }
@@ -47,6 +53,10 @@ export default function () {
   return (
     <Styled.Container width={Dimensions.get("window").width - 30}>
       <Styled.Input
+        bgInput={theme ? "#1f1f1f" : "#f4f4f4"}
+        clInput={theme ? "#ffffff" : "#2d2d2d"}
+
+
         placeholder="Enter a word"
         onChangeText={(e) => setInput(e)}
         value={input}

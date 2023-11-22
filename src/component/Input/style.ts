@@ -11,10 +11,11 @@ export const Container = styled.View<{ width: number }>`
   position: relative;
 `;
 
-export const Input = styled.TextInput`
+export const Input = styled.TextInput<{ bgInput: string, clInput: string }>`
   width: 100%;
   padding: 14px 50px 14px 18px;
-  background-color: #f4f4f4;
+  color: ${props => props.clInput};
+  background-color: ${props => props.bgInput};
 
   border-radius: 10px;
 `;

@@ -27,7 +27,7 @@ export default function ({
   );
 
   function handleSpeak() {
-    Speech.speak("page", {
+    Speech.speak(word, {
       language: "us"
     });
   }
