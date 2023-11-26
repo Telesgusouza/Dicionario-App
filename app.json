@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "frontendMobile",
+    "name": "dictionary",
     "slug": "frontendMobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/favicon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -15,16 +15,29 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.telesgusouza.frontendMobile"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/favicon-adaptive.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.telesgusouza.frontendMobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "003e247e-ca4b-419e-a8c1-7610b4c20b7c"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/003e247e-ca4b-419e-a8c1-7610b4c20b7c"
     }
   }
 }
